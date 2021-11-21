@@ -1,12 +1,9 @@
-<form action="add-filter" method = "POST">
-    <p>Filter Name <input type = "text" name = "filter-name" /></p>
-
-    <label for="filter-names">Choose a filter Type</label>
-    <select name="filter-names" id="filter-names-dropdown">
-        <option value="hashtag">Hashtag</option>
-        <option value="author">Author</option>
-        <option value="trending">Trending</option>
-    </select>
-    <p>Filter <input type = "text" name = "filter" /></p>
-    <p><input type = "submit" value = "submit" /></p>
+{% from "_formhelpers.html" import render_field %}
+<form method=post autocomplete="off">
+    <dl>
+        {{ render_field(form.filter_name) }}
+        {{ render_field(form.filter_type) }}
+        {{ render_field(form.filter_value) }}
+    </dl>
+    <p><input type=submit value=Create>
 </form>

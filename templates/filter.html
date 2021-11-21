@@ -1,0 +1,15 @@
+{% if filters|length > 0 %}
+    <form action="filter/delete" method = "POST" name="filter_remove">
+        <label for="filters">Current Filters</label>
+        <select name="filter" id="filter">
+        {% for filter in filters %}
+            <option value="{{ filter }}">{{ filter[1] }}</option>
+        {% endfor %}
+        </select>
+        <p><input type="submit" value="Remove Filter" /></p>
+    </form>
+{% endif %}
+
+<form action="filter/create" method = "GET">
+    <p><input type="submit" value="Create Filter" /></p>
+</form>

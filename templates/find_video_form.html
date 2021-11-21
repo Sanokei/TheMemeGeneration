@@ -1,0 +1,10 @@
+<form action="" method = "POST">
+    <label for="filters">Choose Filter</label>
+    <select name="filter" id="filter">
+    {% for filter in filters %}
+        <option value="{{ filter }}">{{ filter[1] }}</option>
+    {% endfor %}
+    </select>
+    <p><input type="text" name="results" placeholder="Number of results"></p>
+    <p><input type="submit" value="Use this filter" /></p>
+</form>
