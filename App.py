@@ -88,7 +88,7 @@ def data():
             tags = filter_value.split(',')
             for tag in tags:
                 try:
-                    all_video_id += api.by_hashtag(hashtag=tag,count=int(request.form['results']),offset=0, custom_verifyFp=config.tiktok_api_key)
+                    all_video_id += api.by_hashtag(hashtag=str(tag),count=int(request.form['results']),offset=0, custom_verifyFp=config.tiktok_api_key)
                 except:
                     print("ERROR: " + str(tag) + " is not a hashtag")
         elif filter_type == 'author':
@@ -105,7 +105,7 @@ def data():
         # get the video data
         for video_id in all_video_id:
             video = api.get_video_by_tiktok(data=video_id, custom_verifyFp=config.tiktok_api_key)
-            with open("video_files/{}.mp4".format(str(video_id)), 'wb') as output:
+            with open("video_files/{}.mp4".format(str(video_id['id'])), 'wb') as output:
                 output.write(video) # saves data to the mp4 file
         
         return render_template('find_video.html', template_folder='../templates', all_videos=videos)

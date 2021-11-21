@@ -1,6 +1,18 @@
 # Db
 *.db
 
+# Videos
+*/video_files/
+*.mp4
+*.avi
+*.mkv
+*.mpg
+*.mpeg
+*.mov
+*.wmv
+*.flv
+*.swf
+
 # Config
 config.py
 
