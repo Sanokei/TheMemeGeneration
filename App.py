@@ -1,3 +1,5 @@
+from gevent import monkey
+monkey.patch_all()
 from flask import Flask,render_template,request,redirect,url_for,session,flash
 import MySQLDatabase
 import config
@@ -7,11 +9,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, Form, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired
 import ast
-from gevent import monkey
-monkey.patch_all()
-
+from pathlib import Path
+Path("video_files").mkdir(exist_ok=True)
 # tiktok api
-api = TikTokApi.get_instance()
+api = TikTokApi.get_instance(generate_static_device_id=True)
 
 # Database
 con = MySQLDatabase.sql_connection()
@@ -58,8 +59,8 @@ def delete_filter():
         return f"Cannot delete without context go to /filter"
     if request.method == 'POST':
         filter_id = ast.literal_eval(request.form['filter'])[0]
-        print(filter_id)
-        MySQLDatabase.delete_filter(con, filter_id)
+        print("FILTER_ID: " + str(filter_id))
+        MySQLDatabase.delete_filter(con, str(filter_id))
         return redirect(url_for('index'))
 
 @app.route('/find-video/', methods=['GET','POST']) # use the filter to find videos
@@ -76,23 +77,38 @@ def data():
         filter_name = filters_list[1]
         filter_type = filters_list[2]
         filter_value = filters_list[3]
-        all_videos = []
+        all_video_id = []
         print("id: " + str(filter_id))
         print("name: " + str(filter_name))
         print("type: " + str(filter_type))
         print("value: " + str(filter_value))
         if filter_type == 'hashtag':
-            tags = list(filters_list[3])
+            filter_value = filter_value.replace('#','')
+            print("filter_value: " + filter_value)
+            tags = filter_value.split(',')
             for tag in tags:
-                all_videos += api.by_hashtag(hashtag=tag,count=request.form['results'],offset=0, custom_verifyFp=config.tiktok_api_key)
-                print(f"{all_videos}" + str(len(all_videos)))
+                try:
+                    all_video_id += api.by_hashtag(hashtag=tag,count=int(request.form['results']),offset=0, custom_verifyFp=config.tiktok_api_key)
+                except:
+                    print("ERROR: " + str(tag) + " is not a hashtag")
         elif filter_type == 'author':
-            all_videos = api.by_username(username=filter_value,count=request.form['results'],offset=0, custom_verifyFp=config.tiktok_api_key)
+            try:
+                all_video_id = api.by_username(username=filter_value,count=int(request.form['results']),offset=0, custom_verifyFp=config.tiktok_api_key)
+            except:
+                print("ERROR: " + str(filter_value) + "is not a username")
         elif filter_type == 'trending':
-            all_videos = api.by_trending(count=request.form['results'], custom_verifyFp=config.tiktok_api_key)
+            all_video_id = api.by_trending(count=int(request.form['results']), custom_verifyFp=config.tiktok_api_key)
+        
+        print("ALL_VIDEOS: " + str(all_video_id))
 
-        return f"{all_videos}"
-        # return render_template('find_video.html', template_folder='../templates', all_videos=all_videos)
+        videos = []
+        # get the video data
+        for video_id in all_video_id:
+            video = api.get_video_by_tiktok(data=video_id, custom_verifyFp=config.tiktok_api_key)
+            with open("video_files/{}.mp4".format(str(video_id)), 'wb') as output:
+                output.write(video) # saves data to the mp4 file
+        
+        return render_template('find_video.html', template_folder='../templates', all_videos=videos)
 
 @app.route('/create-video/') # 
 def create_video():

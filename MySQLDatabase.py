@@ -12,8 +12,6 @@ def sql_connection():
 def initial_table_creation(con):
     cursorObj = con.cursor()
     cursorObj.execute("CREATE TABLE IF NOT EXISTS filters(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, value TEXT)")
-    cursorObj.execute("CREATE TABLE IF NOT EXISTS videos(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, value TEXT)")
-    con.commit()
     con.commit()
 
 # filters

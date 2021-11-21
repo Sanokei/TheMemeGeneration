@@ -1,6 +1,4 @@
 <label for="videos">Choose Filter</label>
-<select name="videos" id="videos">
-    {% for video in all_videos %}
-        <option value="{{ video }}">{{ video['desc'] }}</option>
-    {% endfor %}
-</select>
+{% for video in all_videos %}
+    <div value="{{ video }}">{{ video['desc'] }}</div>
+{% endfor %} 
