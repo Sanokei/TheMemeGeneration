@@ -1,4 +1,4 @@
-<form action="" method = "POST">
+<form action="" method = "POST" autocomplete="off">
     <label for="filters">Choose Filter</label>
     <select name="filter" id="filter">
     {% for filter in filters %}
@@ -6,5 +6,6 @@
     {% endfor %}
     </select>
     <p><input type="number" name="results" placeholder="Number of results"></p>
+    <p><input type="number" name="offset" placeholder="Offset"></p>
     <p><input type="submit" value="Use this filter" /></p>
 </form>

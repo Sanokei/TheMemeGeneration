@@ -82,12 +82,12 @@ def data():
             tags = filter_value.split(',')
             for tag in tags:
                 try:
-                    all_video_id += api.by_hashtag(hashtag=str(tag),count=int(request.form['results']),offset=0, custom_verifyFp=config.tiktok_api_key)
+                    all_video_id += api.by_hashtag(hashtag=str(tag),count=int(request.form['results']),offset=int(request.form['offset']), custom_verifyFp=config.tiktok_api_key)
                 except:
                     print("ERROR: " + str(tag) + " is not a hashtag")
         elif filter_type == 'author':
             try:
-                all_video_id = api.by_username(username=filter_value,count=int(request.form['results']),offset=0, custom_verifyFp=config.tiktok_api_key)
+                all_video_id = api.by_username(username=filter_value,count=int(request.form['results']),offset=int(request.form['offset']), custom_verifyFp=config.tiktok_api_key)
             except:
                 print("ERROR: " + str(filter_value) + "is not a username")
         elif filter_type == 'trending':
@@ -111,8 +111,7 @@ def choose_videos():
         return render_template('choose_video.html', template_folder='../templates', videos=all_videos)
     if request.method == 'POST':
         for video in os.listdir("static/video_files"):
-            print(request.form.get(video))
-            if request.form.get(video) == 'on':
+            if request.form.get(video):
                 os.remove("static/video_files/"+video)
         return redirect(url_for('create_video'))
 
@@ -127,6 +126,7 @@ def choose_video(vid_index):
 
 @app.route('/create-video/') # 
 def create_video():
+    return redirect(url_for('index'))
     return render_template('create.html', template_folder='../templates')
 
 Bootstrap(app)

@@ -1,4 +1,4 @@
-<form action="/" method="POST">
+<form action="{{url_for('choose_videos')}}" method="POST">
     {% for video in videos %}
         <br />
         <video controls="controls" preload="preload">
@@ -6,7 +6,7 @@
                 <source src="{{ url_for('static', filename=filename) }}" type="video/mp4"></source>
         </video>
         <br />
-        <p>Delete:<input type="checkbox" value="Delete? " name="{{video}}" /></p>
+        <p>Delete:<input type="checkbox" value="delete" name="{{video}}" /></p>
     {% endfor %}
     <p><input type="submit" value="Continue" /></p>
 </form>
