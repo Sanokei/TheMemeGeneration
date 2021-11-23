@@ -1,4 +1,6 @@
-<label for="videos">Choose Filter</label>
-{% for video in all_videos %}
-    <div value="{{ video }}">{{ video['desc'] }}</div>
-{% endfor %} 
+<form action="{{url_for('choose_video', vid_index=0)}}" method="GET">
+    <h1>Choose to either keep or delete the videos</h1>
+    <p>Downloaded: {{ index }}</p>
+    <p>Time took to download: {{ timeTaken }}</p>
+    <p><input type="submit" value="Continue" /></p>
+</form>

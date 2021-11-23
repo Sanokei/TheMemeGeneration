@@ -1,0 +1,11 @@
+<video autoplay="autoplay" controls="controls" preload="preload">
+    <source src="{{ url_for('static', filename=video) }}" type="video/mp4"></source>
+</video>
+
+<form action="{{ url_for('choose_video', vid_index=index) }}" method="GET">
+    <p><input type="submit" value="Next Video" /></p>
+</form>
+
+<form action="{{ url_for('choose_videos') }}" method="GET">
+    <p><input type="submit" value="Go to Video Choosing" /></p>
+</form>

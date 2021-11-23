@@ -1,0 +1,12 @@
+<form action="/" method="POST">
+    {% for video in videos %}
+        <br />
+        <video controls="controls" preload="preload">
+                {% set filename = filename ~ 'video_files/' ~ video%}
+                <source src="{{ url_for('static', filename=filename) }}" type="video/mp4"></source>
+        </video>
+        <br />
+        <p>Delete:<input type="checkbox" value="Delete? " name="{{video}}" /></p>
+    {% endfor %}
+    <p><input type="submit" value="Continue" /></p>
+</form>
