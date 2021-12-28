@@ -126,7 +126,6 @@ def choose_video(vid_index):
 
 @app.route('/create-video/') # 
 def create_video():
-    return redirect(url_for('index'))
     return render_template('create.html', template_folder='../templates')
 
 Bootstrap(app)
